@@ -9,17 +9,23 @@ TOKEN ="8632066324:AAHTAri1Owiv_T7-OfebMF9vFsBhQxDOFmU"
 # Тексты ответов
 ADDRESS_TEXT = "📍 Наш адрес: Майкоп, ул. Строителей 8Б (район железного рынка)"
 WORK_TIME = "🕒 Мы работаем: 10:00–19:00 каждый день, кроме понедельника"
+BLACKLIST = ["сколько"]  
 
 # Ключевые слова
 ADDRESS_KEYWORDS = ["адрес", "где найти", "где приехать", "где вы", "где находитесь", "как найти"]
 WORK_KEYWORDS = ["время работы", "работаете", "до скольки", "рабочий день", "график работы"]
 
 # Порог похожести для fuzzy поиска (0-100)
-THRESHOLD = 70
+THRESHOLD = 85
 
 # Функция проверки релевантности текста
 def is_relevant(text: str, keywords: list) -> bool:
     text = text.lower().translate(str.maketrans('', '', string.punctuation))
+
+    for black_word in BLACKLIST:
+        if black_word in text:
+            return False
+
     for word in keywords:
         clean_word = word.lower().translate(str.maketrans('', '', string.punctuation))
         if re.search(r'\b' + re.escape(clean_word) + r'\b', text):
