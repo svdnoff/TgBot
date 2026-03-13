@@ -14,17 +14,16 @@ ADDRESS_KEYWORDS = ["адрес", "где найти", "где приехать"
 WORK_KEYWORDS = ["время работы", "работаете", "до скольки", "рабочий день", "график работы"]
 
 # Порог похожести для fuzzy поиска (0-100)
-THRESHOLD = 80
+THRESHOLD = 70
 
 # Функция проверки релевантности текста
 def is_relevant(text: str, keywords: list) -> bool:
-    text = text.lower()
+    text = text.lower().translate(str.maketrans('', '', string.punctuation))
     for word in keywords:
-        # точное вхождение слова
-        if re.search(r'\b' + re.escape(word) + r'\b', text):
+        clean_word = word.lower().translate(str.maketrans('', '', string.punctuation))
+        if re.search(r'\b' + re.escape(clean_word) + r'\b', text):
             return True
-        # fuzzy совпадение
-        if fuzz.partial_ratio(word, text) >= THRESHOLD:
+        if fuzz.partial_ratio(clean_word, text) >= THRESHOLD:
             return True
     return False
 
