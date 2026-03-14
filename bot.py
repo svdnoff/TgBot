@@ -20,9 +20,11 @@ THRESHOLD = 85
 
 # Функция проверки релевантности текста
 def is_relevant(text: str, keywords: list) -> bool:
-    text = text.lower().translate(str.maketrans('', '', string.punctuation))
+    text = text.lower().translate(str.maketrans('', '', string.punctuation)).strip()
 
-    # игнорируем "сколько", если не про работу
+    if text in BLACKLIST:
+        return  False
+
     if "сколько" in text and "работ" not in text:
         return False
 
