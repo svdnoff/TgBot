@@ -42,6 +42,10 @@ def is_relevant(text: str, keywords: list) -> bool:
 # Обработчик сообщений
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.lower()
+    clean_text = raw_text.lower().translate(str.maketrans('', '', string.punctuation)).strip()
+
+    if clean_text in BLACKLIST:
+        return False
 
     if is_relevant(text, ADDRESS_KEYWORDS):
         await update.message.reply_text(
