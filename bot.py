@@ -22,16 +22,19 @@ THRESHOLD = 85
 def is_relevant(text: str, keywords: list) -> bool:
     text = text.lower().translate(str.maketrans('', '', string.punctuation))
 
-    for black_word in BLACKLIST:
-        if black_word in text:
-            return False
+    # игнорируем "сколько", если не про работу
+    if "сколько" in text and "работ" not in text:
+        return False
 
     for word in keywords:
         clean_word = word.lower().translate(str.maketrans('', '', string.punctuation))
+
         if re.search(r'\b' + re.escape(clean_word) + r'\b', text):
             return True
+
         if fuzz.partial_ratio(clean_word, text) >= THRESHOLD:
             return True
+
     return False
 
 # Обработчик сообщений
