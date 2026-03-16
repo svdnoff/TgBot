@@ -9,7 +9,7 @@ TOKEN ="8632066324:AAHTAri1Owiv_T7-OfebMF9vFsBhQxDOFmU"
 # Тексты ответов
 ADDRESS_TEXT = "📍 Наш адрес: Майкоп, ул. Строителей 8Б (район железного рынка)"
 WORK_TIME = "🕒 Мы работаем: 10:00–19:00 каждый день, кроме понедельника"
-BLACKLIST = ["сколько", "есть"]  
+BLACKLIST = ["есть"]  
 
 # Ключевые слова
 ADDRESS_KEYWORDS = ["адрес", "где найти", "где приехать", "где вы", "где находитесь", "как найти"]
@@ -41,11 +41,14 @@ def is_relevant(text: str, keywords: list) -> bool:
 
 # Обработчик сообщений
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text.lower()
-    clean_text = raw_text.lower().translate(str.maketrans('', '', string.punctuation)).strip()
+    if not update.message or not update.message.text:
+        return
+
+    text = update.message.text
+    clean_text = text.lower().translate(str.maketrans('', '', string.punctuation)).strip()
 
     if clean_text in BLACKLIST:
-        return False
+        return
 
     if is_relevant(text, ADDRESS_KEYWORDS):
         await update.message.reply_text(
