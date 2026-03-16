@@ -9,11 +9,13 @@ TOKEN ="8632066324:AAHTAri1Owiv_T7-OfebMF9vFsBhQxDOFmU"
 # Тексты ответов
 ADDRESS_TEXT = "📍 Наш адрес: Майкоп, ул. Строителей 8Б (район железного рынка)"
 WORK_TIME = "🕒 Мы работаем: 10:00–19:00 каждый день, кроме понедельника"
+MAX_TEXT = "📱 Мы есть в MAX: https://max.ru/join/IMHKjeOxfKJFcRQTQVrhlCGvLx-qOzAUiTpxCussSr0"
 BLACKLIST = ["есть"]  
 
 # Ключевые слова
 ADDRESS_KEYWORDS = ["адрес", "где найти", "где приехать", "где вы", "где находитесь", "как найти"]
 WORK_KEYWORDS = ["время работы", "работаете", "до скольки", "рабочий день", "график работы"]
+MAX_KEYWORDS = ["max","макс","в максе","есть ли макс","есть ли вы в максе","ссылка на макс","есть ли max","есть ли вы в max","соцсеть макс"]
 
 # Порог похожести для fuzzy поиска (0-100)
 THRESHOLD = 85
@@ -63,6 +65,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_to_message_id=update.message.message_id
         )
         return
+    if is_relevant(text, MAX_KEYWORDS):
+        await update.message.reply_text(
+            MAX_TEXT,
+            reply_to_message_id=update.message.message_id
+        )
+    return
 
 # Создание приложения и добавление обработчика
 app = ApplicationBuilder().token(TOKEN).build()
