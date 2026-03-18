@@ -39,7 +39,7 @@ def clean(text: str) -> str:
 def is_relevant(text: str, keywords: list) -> bool:
     text = clean(text)
 
-    # игнор "есть?" и подобного
+
     if text in BLACKLIST:
         return False
 
